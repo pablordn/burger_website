@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Celestial Urban Burgers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --c1: #06050F;
+      --c2: #EEE8FF;
+      --c3: #9B4DDB;
+      --c4: #F060D8;
+      --c5: #0D0B1A;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-serif: 'Libre Baskerville', serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--c1);
+      color: var(--c2);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 4rem;
+      transition: background 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(6,5,15,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(238,232,255,0.08);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.12em;
+      color: var(--c2);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--c3); }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--c2);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta {
+      background: var(--c3) !important;
+      color: var(--c2) !important;
+      opacity: 1 !important;
+      padding: 0.6rem 1.4rem;
+      border-radius: 2px;
+      font-weight: 500;
+    }
+    .nav-cta:hover { background: #7A35B8 !important; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      background: none;
+      border: none;
+      z-index: 200;
+      min-width: 44px;
+      min-height: 44px;
+      justify-content: center;
+      align-items: center;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--c2);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 4rem 4rem;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--c4);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 9vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: var(--c2);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .hero-title .accent { color: var(--c3); display: block; }
+    .hero-desc {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(238,232,255,0.65);
+      max-width: 380px;
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+    .btn-primary {
+      background: var(--c3);
+      color: var(--c2);
+      border: none;
+      padding: 1rem 2.2rem;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: #7A35B8; transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--c2);
+      border: 1px solid rgba(238,232,255,0.3);
+      padding: 1rem 2.2rem;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--c2); transform: translateY(-2px); }
+
+    .hero-right { position: relative; overflow: hidden; }
+    .hero-img-wrapper { position: absolute; inset: 0; }
+    .hero-img-wrapper::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, var(--c1) 0%, transparent 40%);
+      z-index: 1;
+    }
+    .hero-img-wrapper video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: saturate(0.8) contrast(1.05);
+    }
+    .hero-badge {
+      position: absolute;
+      bottom: 3rem; right: 3rem;
+      z-index: 10;
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      border: 1px solid rgba(238,232,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      animation: spin 20s linear infinite;
+    }
+    .hero-badge-inner {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      line-height: 1.6;
+      color: var(--c4);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── TICKER ─── */
+    .ticker {
+      background: var(--c3);
+      overflow: hidden;
+      padding: 0.9rem 0;
+      border-top: 1px solid rgba(238,232,255,0.1);
+      border-bottom: 1px solid rgba(238,232,255,0.1);
+    }
+    .ticker-track {
+      display: flex;
+      animation: ticker 20s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      color: var(--c2);
+      padding: 0 2rem;
+    }
+    .ticker-dot { color: var(--c1); opacity: 0.4; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 7rem 4rem; }
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--c4);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 5vw, 5rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+      color: var(--c2);
+    }
+
+    /* ─── MENU ─── */
+    .menu-section { background: var(--c1); }
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: rgba(238,232,255,0.06);
+    }
+    .menu-card {
+      background: var(--c5);
+      padding: 2.5rem 2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .menu-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--c3);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .menu-card:hover { background: rgba(155,77,219,0.08); }
+    .menu-card:hover::after { transform: scaleX(1); }
+    .menu-card-number {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: rgba(238,232,255,0.06);
+      position: absolute;
+      top: 1rem; right: 1.5rem;
+      line-height: 1;
+    }
+    .menu-card-name {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--c2);
+      margin-bottom: 0.6rem;
+    }
+    .menu-card-desc {
+      font-size: 0.82rem;
+      color: rgba(238,232,255,0.5);
+      line-height: 1.7;
+    }
+    .menu-card-tag {
+      display: inline-block;
+      margin-top: 1.5rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--c4);
+      border: 1px solid rgba(240,96,216,0.3);
+      padding: 0.25rem 0.7rem;
+    }
+    .menu-card.featured { background: var(--c3); }
+    .menu-card.featured .menu-card-name  { color: var(--c2); }
+    .menu-card.featured .menu-card-desc  { color: rgba(238,232,255,0.75); }
+    .menu-card.featured .menu-card-number{ color: rgba(238,232,255,0.15); }
+
+    /* ─── NACHOS ─── */
+    .nachos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
+      background: var(--c5);
+    }
+    .nachos-visual { position: relative; overflow: hidden; }
+    .nachos-visual img,
+    .nachos-visual video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: saturate(0.7) contrast(1.1);
+      display: block;
+    }
+    .nachos-visual::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 60%, var(--c5) 100%);
+    }
+    .nachos-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 4rem;
+    }
+    .nachos-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 5vw, 6rem);
+      line-height: 0.9;
+      letter-spacing: 0.03em;
+      color: var(--c2);
+      margin: 1.5rem 0;
+    }
+    .nachos-desc {
+      font-size: 0.9rem;
+      color: rgba(238,232,255,0.6);
+      line-height: 1.9;
+      max-width: 360px;
+    }
+    .nachos-highlight { margin-top: 2rem; display: flex; gap: 2rem; }
+    .nachos-highlight-item { text-align: center; }
+    .nachos-highlight-item span {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--c4);
+    }
+    .nachos-highlight-item p {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(238,232,255,0.4);
+      margin-top: 0.3rem;
+    }
+
+    /* ─── ABOUT ─── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      background: var(--c5);
+    }
+    .about-visual { position: relative; }
+    .about-img,
+    .about-visual video {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      filter: saturate(0.5);
+      display: block;
+    }
+    .about-stat-card {
+      position: absolute;
+      bottom: -2rem; right: -2rem;
+      background: var(--c3);
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+    .about-stat-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--c2);
+      display: block;
+    }
+    .about-stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(238,232,255,0.7);
+    }
+    .about-content { padding: 2rem 0; }
+    .about-text {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: rgba(238,232,255,0.7);
+      margin: 2rem 0;
+    }
+    .about-address {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(238,232,255,0.12);
+    }
+    .about-address p {
+      font-size: 0.85rem;
+      color: rgba(238,232,255,0.5);
+      line-height: 2;
+      letter-spacing: 0.04em;
+    }
+    .about-address strong { color: var(--c2); font-weight: 500; }
+
+    /* ─── CARRUSEL ─── */
+    .carousel-section {
+      background: var(--c1);
+      padding: 7rem 0;
+      overflow: hidden;
+    }
+    .carousel-header {
+      padding: 0 4rem;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .carousel-track-wrap { overflow: hidden; }
+    .carousel-track {
+      display: flex;
+      gap: 2px;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .carousel-slide {
+      flex-shrink: 0;
+      width: calc((100vw - 6px) / 3);
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--c5);
+    }
+    .carousel-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.7);
+      transition: filter 0.4s, transform 0.4s;
+    }
+    .carousel-slide:hover img { filter: saturate(1); transform: scale(1.03); }
+    .carousel-controls {
+      display: flex;
+      gap: 0.75rem;
+      padding: 2rem 4rem 0;
+      justify-content: flex-end;
+    }
+    .carousel-btn {
+      width: 44px; height: 44px;
+      border: 1px solid rgba(238,232,255,0.2);
+      background: transparent;
+      color: var(--c2);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .carousel-btn:hover { border-color: var(--c3); background: rgba(155,77,219,0.12); }
+    .carousel-btn:disabled { opacity: 0.2; cursor: default; }
+
+    /* ─── RESEÑAS ─── */
+    .reviews-section { background: var(--c5); padding: 7rem 4rem; }
+    .reviews-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .reviews-rating-big { display: flex; align-items: baseline; gap: 1rem; }
+    .reviews-rating-big .num {
+      font-family: var(--font-display);
+      font-size: 5rem;
+      line-height: 1;
+      color: var(--c2);
+    }
+    .reviews-rating-big .stars { color: var(--c4); font-size: 1.2rem; letter-spacing: 0.1em; }
+    .reviews-rating-big .total { font-size: 0.75rem; color: rgba(238,232,255,0.4); letter-spacing: 0.1em; }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: rgba(238,232,255,0.06);
+    }
+    .review-card {
+      background: var(--c1);
+      padding: 2.2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .review-top { display: flex; align-items: center; gap: 1rem; }
+    .review-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--c3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--c2);
+      flex-shrink: 0;
+    }
+    .review-meta { flex: 1; min-width: 0; }
+    .review-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--c2);
+    }
+    .review-date {
+      font-size: 0.7rem;
+      color: rgba(238,232,255,0.3);
+      margin-top: 0.15rem;
+    }
+    .review-stars { color: var(--c4); font-size: 0.85rem; letter-spacing: 0.1em; }
+    .review-text {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: rgba(238,232,255,0.65);
+      flex: 1;
+    }
+    .review-source {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(238,232,255,0.2);
+    }
+    .reviews-cta { margin-top: 2.5rem; text-align: center; }
+
+    /* ─── INSTAGRAM ─── */
+    .instagram-section { background: var(--c1); padding: 7rem 4rem; }
+    .instagram-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .instagram-handle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--c4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .instagram-handle:hover { color: var(--c2); }
+    .instagram-handle svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+    .instagram-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    .ig-post {
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+      background: var(--c5);
+      display: block;
+    }
+    .ig-post img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.5);
+      transition: filter 0.4s, transform 0.4s;
+    }
+    .ig-post:hover img { filter: saturate(1); transform: scale(1.05); }
+    .ig-overlay {
+      position: absolute; inset: 0;
+      background: rgba(6,5,15,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .ig-post:hover .ig-overlay { opacity: 1; }
+    .ig-overlay span {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--c2);
+    }
+    .instagram-follow { margin-top: 2.5rem; text-align: center; }
+
+    /* ─── CTA FULL ─── */
+    .cta-full {
+      background: var(--c3);
+      text-align: center;
+      padding: 6rem 4rem;
+    }
+    .cta-full .section-label { color: rgba(238,232,255,0.6); }
+    .cta-full .section-title { color: var(--c2); margin-bottom: 1.5rem; }
+    .cta-full p {
+      font-size: 1rem;
+      color: rgba(238,232,255,0.75);
+      margin-bottom: 2.5rem;
+    }
+    .btn-dark {
+      background: var(--c1);
+      color: var(--c2);
+      border: none;
+      padding: 1rem 2.8rem;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-dark:hover { opacity: 0.85; transform: translateY(-2px); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--c5);
+      padding: 5rem 4rem 2.5rem;
+      border-top: 1px solid rgba(238,232,255,0.08);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(238,232,255,0.08);
+    }
+    .footer-brand .nav-logo { font-size: 2rem; }
+    .footer-brand p {
+      font-size: 0.82rem;
+      color: rgba(238,232,255,0.45);
+      line-height: 1.8;
+      margin-top: 1rem;
+      max-width: 240px;
+    }
+    .footer-col-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--c4);
+      margin-bottom: 1.5rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.8rem; }
+    .footer-col ul li a {
+      font-size: 0.85rem;
+      color: rgba(238,232,255,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--c2); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+    }
+    .footer-copy { font-size: 0.72rem; color: rgba(238,232,255,0.25); letter-spacing: 0.06em; }
+    .footer-social { display: flex; gap: 1.5rem; }
+    .footer-social a {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(238,232,255,0.35);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-social a:hover { color: var(--c2); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 639px) {
+      nav { padding: 1.1rem 1.4rem; background: rgba(6,5,15,0.97); }
+      .nav-toggle { display: flex; }
+      .nav-links {
+        position: fixed; inset: 0;
+        background: var(--c1);
+        flex-direction: column; justify-content: center; align-items: center;
+        gap: 2.2rem; opacity: 0; pointer-events: none;
+        transition: opacity 0.3s; z-index: 150;
+      }
+      .nav-links.open { opacity: 1; pointer-events: all; }
+      .nav-links a { font-size: 1.1rem; letter-spacing: 0.22em; }
+      .nav-cta { padding: 0.8rem 2rem; font-size: 1rem !important; }
+
+      .hero { grid-template-columns: 1fr; min-height: 100svh; position: relative; }
+      .hero-right { display: block; position: absolute; inset: 0; z-index: 0; }
+      .hero-img-wrapper::before { background: linear-gradient(180deg, rgba(6,5,15,0.45) 0%, rgba(6,5,15,0.88) 60%, var(--c1) 100%); }
+      .hero-left { position: relative; z-index: 2; padding: 7rem 1.4rem 4rem; justify-content: flex-end; min-height: 100svh; }
+      .hero-title { font-size: clamp(4rem, 18vw, 6rem); }
+      .hero-desc { font-size: 0.9rem; max-width: 100%; }
+      .hero-actions { flex-direction: column; gap: 0.8rem; }
+      .btn-primary, .btn-ghost { text-align: center; width: 100%; padding: 1rem; }
+      .hero-badge { display: none; }
+
+      section { padding: 3.5rem 1.4rem; }
+      .section-title { font-size: clamp(2.6rem, 12vw, 4rem); }
+      .menu-header { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-card { padding: 2rem 1.4rem; }
+
+      .nachos { grid-template-columns: 1fr; min-height: auto; }
+      .nachos-visual { min-height: 260px; order: -1; }
+      .nachos-visual::after { background: linear-gradient(180deg, transparent 40%, var(--c5) 100%); }
+      .nachos-content { padding: 2.5rem 1.4rem 3rem; }
+      .nachos-title { font-size: clamp(2.8rem, 14vw, 4.5rem); }
+      .nachos-desc { max-width: 100%; }
+
+      .about { grid-template-columns: 1fr; gap: 0; }
+      .about-visual { padding: 0 1.4rem; }
+      .about-img { aspect-ratio: 16/9; }
+      .about-stat-card { right: 1.4rem; bottom: -1.5rem; padding: 1rem 1.4rem; }
+      .about-stat-num { font-size: 2rem; }
+      .about-content { padding: 3rem 1.4rem 2rem; }
+
+      .carousel-section { padding: 3.5rem 0; }
+      .carousel-header { padding: 0 1.4rem; }
+      .carousel-slide { width: calc(100vw - 3rem); }
+      .carousel-controls { padding: 1.5rem 1.4rem 0; }
+
+      .reviews-section { padding: 3.5rem 1.4rem; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .reviews-rating-big .num { font-size: 3.5rem; }
+
+      .instagram-section { padding: 3.5rem 1.4rem; }
+      .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .cta-full { padding: 4rem 1.4rem; }
+      .cta-full .section-title { font-size: clamp(2.4rem, 13vw, 4rem); }
+      footer { padding: 3.5rem 1.4rem 2rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .footer-social { justify-content: center; }
+    }
+
+    @media (min-width: 640px) and (max-width: 1023px) {
+      nav { padding: 1.3rem 2.5rem; }
+      .nav-toggle { display: flex; }
+      .nav-links {
+        position: fixed; inset: 0; background: var(--c1);
+        flex-direction: column; justify-content: center; align-items: center;
+        gap: 2.5rem; opacity: 0; pointer-events: none;
+        transition: opacity 0.3s; z-index: 150;
+      }
+      .nav-links.open { opacity: 1; pointer-events: all; }
+      .nav-links a { font-size: 1.2rem; }
+      .nav-cta { padding: 0.9rem 2.2rem; }
+      .hero { grid-template-columns: 1fr; min-height: 100svh; position: relative; }
+      .hero-right { display: block; position: absolute; inset: 0; z-index: 0; }
+      .hero-img-wrapper::before { background: linear-gradient(180deg, rgba(6,5,15,0.3) 0%, rgba(6,5,15,0.82) 55%, var(--c1) 100%); }
+      .hero-left { position: relative; z-index: 2; padding: 8rem 3rem 5rem; justify-content: flex-end; min-height: 100svh; }
+      .hero-title { font-size: clamp(5rem, 13vw, 8rem); }
+      .hero-desc { max-width: 480px; }
+      .hero-badge { display: none; }
+      section { padding: 5rem 3rem; }
+      .about { grid-template-columns: 1fr 1fr; gap: 3rem; }
+      .about-stat-card { right: -1rem; bottom: -1.5rem; }
+      .menu-header { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+      .nachos { grid-template-columns: 1fr 1fr; min-height: 500px; }
+      .nachos-content { padding: 3.5rem 2.5rem; }
+      .nachos-title { font-size: clamp(3rem, 7vw, 5rem); }
+      .carousel-section { padding: 5rem 0; }
+      .carousel-header { padding: 0 3rem; }
+      .carousel-slide { width: calc((100vw - 4px) / 2); }
+      .carousel-controls { padding: 1.5rem 3rem 0; }
+      .reviews-section { padding: 5rem 3rem; }
+      .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+      .instagram-section { padding: 5rem 3rem; }
+      .instagram-grid { grid-template-columns: repeat(3, 1fr); }
+      .cta-full { padding: 5rem 3rem; }
+      footer { padding: 4rem 3rem 2.5rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    }
+
+    @media (min-width: 1024px) and (max-width: 1439px) {
+      nav { padding: 1.5rem 4rem; }
+      section { padding: 7rem 4rem; }
+    }
+
+    @media (min-width: 1440px) {
+      nav { padding: 1.8rem 7rem; }
+      .nav-logo { font-size: 1.9rem; }
+      section { padding: 9rem 7rem; }
+      .hero-left { padding: 10rem 7rem 5rem; }
+      .hero-title { font-size: clamp(7rem, 8vw, 11rem); }
+      .about { gap: 8rem; }
+      .nachos-content { padding: 6rem 6rem; }
+      .menu-grid { grid-template-columns: repeat(3, 1fr); }
+      .menu-card { padding: 3rem 2.5rem; }
+      .menu-card-name { font-size: 1.9rem; }
+      .carousel-section { padding: 9rem 0; }
+      .carousel-header { padding: 0 7rem; }
+      .carousel-controls { padding: 2rem 7rem 0; }
+      .reviews-section { padding: 9rem 7rem; }
+      .instagram-section { padding: 9rem 7rem; }
+      .cta-full { padding: 8rem 7rem; }
+      footer { padding: 7rem 7rem 3rem; }
+      .footer-top { grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 5rem; }
+    }
+
+    @media (min-width: 1920px) {
+      nav { padding: 2rem 10rem; }
+      .nav-logo { font-size: 2.1rem; }
+      .nav-links { gap: 3.5rem; }
+      .nav-links a { font-size: 0.85rem; }
+      section { padding: 11rem 10rem; }
+      .hero-left { padding: 12rem 10rem 6rem; }
+      .hero-title { font-size: clamp(9rem, 7.5vw, 13rem); }
+      .hero-desc { font-size: 1.15rem; max-width: 500px; }
+      .section-title { font-size: clamp(4rem, 4vw, 7rem); }
+      .about { gap: 10rem; }
+      .about-text { font-size: 1.15rem; }
+      .about-stat-num { font-size: 3.5rem; }
+      .nachos-content { padding: 8rem 8rem; }
+      .nachos-title { font-size: clamp(5rem, 5vw, 8rem); }
+      .nachos-desc { font-size: 1.05rem; max-width: 440px; }
+      .menu-card { padding: 3.5rem 3rem; }
+      .menu-card-name { font-size: 2.1rem; }
+      .menu-card-number { font-size: 5rem; }
+      .menu-card-desc { font-size: 0.95rem; }
+      .carousel-section { padding: 11rem 0; }
+      .carousel-header { padding: 0 10rem; }
+      .carousel-controls { padding: 2rem 10rem 0; }
+      .reviews-section { padding: 11rem 10rem; }
+      .instagram-section { padding: 11rem 10rem; }
+      .instagram-grid { grid-template-columns: repeat(6, 1fr); }
+      .cta-full { padding: 10rem; }
+      footer { padding: 9rem 10rem 4rem; }
+      .footer-top { gap: 7rem; }
+      .footer-brand p { max-width: 320px; font-size: 0.95rem; }
+      .footer-col ul li a { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <img src="https://celestialburgers.es/assets/white-text-logo.png" alt="Celestial Urban Burgers" style="height:36px;width:auto;display:block;">
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#menu"      class="nav-close">Carta</a></li>
+    <li><a href="#nosotros"  class="nav-close">Nosotros</a></li>
+    <li><a href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+    <li><a href="https://www.ubereats.com/es/store/celestial-urban-burgers/-A2RJQZ8W32Vcqd1Ek908A" target="_blank" rel="noopener noreferrer" class="nav-cta">Pedir Ahora</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding:0">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Getafe, Madrid &nbsp;·&nbsp; Desde 2020</p>
+    <h1 class="hero-title">
+      THE<br>BEST<br>
+      <span class="accent">BURGER</span>
+      IN TOWN
+    </h1>
+    <p class="hero-desc">
+      Hamburguesas únicas elaboradas con ingredientes frescos y de calidad.
+      Cada bocado, una experiencia que no olvidarás.
+    </p>
+    <div class="hero-actions">
+      <a href="https://www.ubereats.com/es/store/celestial-urban-burgers/-A2RJQZ8W32Vcqd1Ek908A" target="_blank" rel="noopener noreferrer" class="btn-primary">Pide a domicilio</a>
+      <a href="https://www.google.com/maps/reserve/v/dine/c/TGbvpSDPLIA" target="_blank" rel="noopener noreferrer" class="btn-ghost">Reservar mesa</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrapper">
+      <video autoplay muted loop playsinline>
+        <source src="https://celestialburgers.es/assets/Intro%20web.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-badge">
+      <div class="hero-badge-inner">URBAN<br>BURGERS<br>★<br>ARTISAN</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Celestial Urban Burgers</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">The Best Burger In Town</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Ingredientes Frescos</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Getafe, Madrid</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Nachos Celestial</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Reparto a Domicilio</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Celestial Urban Burgers</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">The Best Burger In Town</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Ingredientes Frescos</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Getafe, Madrid</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Nachos Celestial</span><span class="ticker-item ticker-dot">✦</span>
+    <span class="ticker-item">Reparto a Domicilio</span><span class="ticker-item ticker-dot">✦</span>
+  </div>
+</div>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="menu-header reveal">
+    <div>
+      <p class="section-label">Nuestra selección</p>
+      <h2 class="section-title">LA CARTA</h2>
+    </div>
+    <a href="https://celestialburgers.es/assets/CARTA%20CELESTIAL%20V13%20gris.pdf" target="_blank" rel="noopener noreferrer" class="btn-ghost">Ver carta completa →</a>
+  </div>
+  <div class="menu-grid reveal">
+    <div class="menu-card">
+      <span class="menu-card-number">01</span>
+      <p class="menu-card-name">CELESTIAL CLASSIC</p>
+      <p class="menu-card-desc">Doble smash de vaca madurada 60 días DISCARLUX en pan brioche potato bun, salsa mayo ahumada, queso olavidia (premio al mejor queso del mundo) y cebolla caramelizada al Pedro Ximénez casera
+</p>
+      <span class="menu-card-tag">La más pedida ★</span>
+    </div>
+    <div class="menu-card">
+      <span class="menu-card-number">02</span>
+      <p class="menu-card-name">BIG BANG</p>
+      <p class="menu-card-desc">Pan brioche con mantequilla tostada, salsa spicy mayo, carne de Buey madurado 70 días 180gr certificada DISCARLUX , queso Gallego Arzúa fundido, bacon ahumado crujiente.</p>
+      <span class="menu-card-tag">Signature</span>
+    </div>
+    <div class="menu-card">
+      <span class="menu-card-number">03</span>
+      <p class="menu-card-name">La Ganadora</p>
+      <p class="menu-card-desc">Pan Brioche, medallón 180gr de carne de buey DISCARLUX, Salsa Emy, Confitura de bacon y queso inglés.
+</p>
+      <span class="menu-card-tag">La más especial</span>
+    </div>
+    <div class="menu-card">
+      <span class="menu-card-number">04</span>
+      <p class="menu-card-name">NACHOS CELESTIAL</p>
+      <p class="menu-card-desc">Totopos caseros, pulled pork, nata agria, crema de cheddar y salsa Honey BBQ.</p>
+      <span class="menu-card-tag">Para compartir</span>
+    </div>
+    <div class="menu-card">
+      <span class="menu-card-number">05</span>
+      <p class="menu-card-name">Golden Jam Fries</p>
+      <p class="menu-card-desc">Cama de patatas fritas crujientes, salsa cheddar casera, confitura de bacon y salsa emmy.
+</p>
+      <span class="menu-card-tag">NOVEDAD</span>
+    </div>
+    <div class="menu-card">
+      <span class="menu-card-number">06</span>
+      <p class="menu-card-name">Creamy Cheesecake</p>
+      <p class="menu-card-desc">Tarta de queso cremosa con galleta de jengibre y chocolate blanco jungly.
+</p>
+      <span class="menu-card-tag">PARA LOS MAS QUESEROS
+      
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- NACHOS FEATURE -->
+<div class="nachos reveal">
+  <div class="nachos-visual">
+    <img src="img/papas.png" alt="Papas fritas Celestial" />
+  </div>
+  <div class="nachos-content">
+    <p class="section-label">Especialidad de la casa</p>
+    <h2 class="nachos-title">GOLDEN JAM<br>FRIES</h2>
+    <p class="nachos-desc">
+      Cama de patatas fritas crujientes, salsa cheddar casera, confitura de bacon y salsa emmy.
+    </p>
+    <div class="nachos-highlight">
+      <div class="nachos-highlight-item"><span>12h</span><p>Confitura de Bacon</p></div>
+      <div class="nachos-highlight-item"><span>100%</span><p>Caseras</p></div>
+      <div class="nachos-highlight-item"><span>★★★★</span><p>Rating</p></div>
+    </div>
+    <div style="margin-top:2.5rem">
+      <a href="https://www.google.com/maps/reserve/v/dine/c/TGbvpSDPLIA" target="_blank" rel="noopener noreferrer" class="btn-primary">Reservar y probarlos</a>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="nosotros">
+  <div class="about-visual reveal">
+    <img class="about-img" src="img/about.png" alt="Hamburguesa Celestial" />
+    <div class="about-stat-card">
+      <span class="about-stat-num">★ 4.8</span>
+      <span class="about-stat-label">Valoración media</span>
+    </div>
+  </div>
+  <div class="about-content reveal">
+    <p class="section-label">Sobre nosotros</p>
+    <h2 class="section-title">PASIÓN<br>POR LA<br>HAMBURGUESA</h2>
+    <p class="about-text">
+      En Celestial Urban Burgers, cada hamburguesa es un acto de amor. Seleccionamos los
+      mejores ingredientes, trabajamos con proveedores locales y cocinamos con la honestidad
+      de quien sabe que no hay atajos para hacer las cosas bien.
+    </p>
+    <a href="https://www.ubereats.com/es/store/celestial-urban-burgers/-A2RJQZ8W32Vcqd1Ek908A" target="_blank" rel="noopener noreferrer" class="btn-primary">Pide ahora</a>
+    <div class="about-address">
+      <p><strong>Dirección</strong><br>Calle Hospital de San José Nº5<br>Getafe, 28901 · Madrid</p>
+      <p style="margin-top:1rem"><strong>Teléfono</strong><br>(+34) 918 433 143</p>
+    </div>
+  </div>
+</section>
+
+<!-- CARRUSEL -->
+<section class="carousel-section reveal">
+  <div class="carousel-header">
+    <div>
+      <p class="section-label">Galería</p>
+      <h2 class="section-title">NUESTROS<br>PLATOS</h2>
+    </div>
+  </div>
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide"><img src="img/burger1.png"   alt="Hamburguesa Celestial"></div>
+      <div class="carousel-slide"><img src="img/burger2.png"   alt="Hamburguesa Celestial"></div>
+      <div class="carousel-slide"><img src="img/smash.png"     alt="Smash Burger Celestial"></div>
+      <div class="carousel-slide"><img src="img/crispy.png"    alt="Crispy Chicken Celestial"></div>
+      <div class="carousel-slide"><img src="img/wings.png"     alt="Wings Celestial"></div>
+      <div class="carousel-slide"><img src="img/tenders.png"   alt="Tenders Celestial"></div>
+      <div class="carousel-slide"><img src="img/croquetas.png" alt="Croquetas Celestial"></div>
+      <div class="carousel-slide"><img src="img/rollitos.png"  alt="Rollitos Celestial"></div>
+      <div class="carousel-slide"><img src="img/brownie.png"   alt="Brownie Celestial"></div>
+      <div class="carousel-slide"><img src="img/flan.png"      alt="Postre Celestial"></div>
+    </div>
+  </div>
+  <div class="carousel-controls">
+    <button class="carousel-btn" id="carPrev" aria-label="Anterior">←</button>
+    <button class="carousel-btn" id="carNext" aria-label="Siguiente">→</button>
+  </div>
+</section>
+
+<!-- RESEÑAS -->
+<section class="reviews-section reveal">
+  <div class="reviews-header">
+    <div>
+      <p class="section-label">Lo que dicen de nosotros</p>
+      <h2 class="section-title">RESEÑAS<br>DE GOOGLE</h2>
+    </div>
+    <div class="reviews-rating-big">
+      <span class="num">4.8</span>
+      <div>
+        <div class="stars">★★★★★</div>
+        <div class="total">+200 reseñas</div>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-top">
+        <div class="review-avatar">M</div>
+        <div class="review-meta">
+          <p class="review-name">María G.</p>
+          <p class="review-date">Hace 2 semanas</p>
+        </div>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">"Las mejores hamburguesas que he probado en Madrid. La Celestial Classic es de otro nivel, el pan brioche y la carne madurada hacen una combinación perfecta."</p>
+      <span class="review-source">Google Reviews</span>
+    </div>
+    <div class="review-card">
+      <div class="review-top">
+        <div class="review-avatar" style="background:var(--c4);color:var(--c1)">J</div>
+        <div class="review-meta">
+          <p class="review-name">Javier R.</p>
+          <p class="review-date">Hace 1 mes</p>
+        </div>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">"Fui con mis amigos y pedimos los nachos para compartir. Una locura. El pulled pork y la crema de cheddar casera son increíbles. Repetiremos seguro."</p>
+      <span class="review-source">Google Reviews</span>
+    </div>
+    <div class="review-card">
+      <div class="review-top">
+        <div class="review-avatar" style="background:#1A3A5C">A</div>
+        <div class="review-meta">
+          <p class="review-name">Ana M.</p>
+          <p class="review-date">Hace 3 semanas</p>
+        </div>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">"Local con mucho ambiente, trato excelente y una carta que tiene de todo. La Crispy Bird es adictiva. El delivery también llega rápido y en perfecto estado."</p>
+      <span class="review-source">Google Reviews</span>
+    </div>
+    <div class="review-card">
+      <div class="review-top">
+        <div class="review-avatar" style="background:#2A1A4A">C</div>
+        <div class="review-meta">
+          <p class="review-name">Carlos T.</p>
+          <p class="review-date">Hace 2 meses</p>
+        </div>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">"La Double Smash es brutal. Doble smash, queso fundido, pickles… todo perfectamente equilibrado. Sin duda el mejor burger de Getafe."</p>
+      <span class="review-source">Google Reviews</span>
+    </div>
+    <div class="review-card">
+      <div class="review-top">
+        <div class="review-avatar" style="background:#3A1A1A">L</div>
+        <div class="review-meta">
+          <p class="review-name">Laura P.</p>
+          <p class="review-date">Hace 1 semana</p>
+        </div>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">"Como vegetariana tenía mis dudas pero la Green Planet me conquistó. Remolacha, aguacate y alioli de hierbas… una hamburguesa vegana que merece la pena."</p>
+      <span class="review-source">Google Reviews</span>
+    </div>
+    <div class="review-card">
+      <div class="review-top">
+        <div class="review-avatar" style="background:#1A3A2A">D</div>
+        <div class="review-meta">
+          <p class="review-name">David S.</p>
+          <p class="review-date">Hace 5 días</p>
+        </div>
+        <span class="review-stars">★★★★★</span>
+      </div>
+      <p class="review-text">"Pedí a domicilio por Uber Eats y llegó caliente y bien presentado. La Smoky Mountain con el pulled pork ahumado es una obra de arte. 10/10."</p>
+      <span class="review-source">Google Reviews</span>
+    </div>
+  </div>
+  <div class="reviews-cta">
+    <a href="https://maps.app.goo.gl/4EedHg9yPsDCnurJA" target="_blank" rel="noopener noreferrer" class="btn-ghost">Ver todas las reseñas en Google →</a>
+  </div>
+</section>
+
+<!-- INSTAGRAM
+<section class="instagram-section reveal">
+  <div class="instagram-header">
+    <div>
+      <p class="section-label">Síguenos</p>
+      <h2 class="section-title">@CELESTIAL.BURGERS</h2>
+    </div>
+    <a href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer" class="instagram-handle">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Ver perfil completo →
+    </a>
+  </div>
+  <div class="instagram-grid">
+    <a class="ig-post" href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">
+      <img src="img/burger1.png" alt="Celestial Burgers"><div class="ig-overlay"><span>Ver en IG</span></div>
+    </a>
+    <a class="ig-post" href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">
+      <img src="img/smash.png" alt="Celestial Burgers"><div class="ig-overlay"><span>Ver en IG</span></div>
+    </a>
+    <a class="ig-post" href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">
+      <img src="img/wings.png" alt="Celestial Burgers"><div class="ig-overlay"><span>Ver en IG</span></div>
+    </a>
+    <a class="ig-post" href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">
+      <img src="img/tenders.png" alt="Celestial Burgers"><div class="ig-overlay"><span>Ver en IG</span></div>
+    </a>
+    <a class="ig-post" href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">
+      <img src="img/croquetas.png" alt="Celestial Burgers"><div class="ig-overlay"><span>Ver en IG</span></div>
+    </a>
+    <a class="ig-post" href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">
+      <img src="img/rollitos.png" alt="Celestial Burgers"><div class="ig-overlay"><span>Ver en IG</span></div>
+    </a>
+    <a class="ig-post" href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">
+      <img src="img/brownie.png" alt="Celestial Burgers"><div class="ig-overlay"><span>Ver en IG</span></div>
+    </a>
+    <a class="ig-post" href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">
+      <img src="img/flan.png" alt="Celestial Burgers"><div class="ig-overlay"><span>Ver en IG</span></div>
+    </a>
+  </div>
+  <div class="instagram-follow">
+    <a href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer" class="btn-primary">Seguir en Instagram</a>
+  </div>
+</section>
+ -->
+<!-- CTA -->
+<div class="cta-full reveal">
+  <p class="section-label">Delivery disponible</p>
+  <h2 class="section-title">DIRECTO<br>A TU CASA</h2>
+  <p>Las mejores hamburguesas de Getafe, donde tú estés.<br>Pedido fácil, entrega rápida, calidad garantizada.</p>
+  <a href="https://www.ubereats.com/es/store/celestial-urban-burgers/-A2RJQZ8W32Vcqd1Ek908A" target="_blank" rel="noopener noreferrer" class="btn-dark">Pedir en Uber Eats</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">
+        <img src="https://celestialburgers.es/assets/white-text-logo.png" alt="Celestial Urban Burgers" style="height:40px;width:auto;display:block;">
+      </a>
+      <p>Las mejores hamburguesas urbanas de tu ciudad. Ingredientes frescos, recetas propias y mucha pasión en cada bocado.</p>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Carta</p>
+      <ul>
+        <li><a href="https://celestialburgers.es/assets/CARTA%20CELESTIAL%20V13%20gris.pdf" target="_blank" rel="noopener noreferrer">Ver carta PDF</a></li>
+        <li><a href="https://celestialburgers.es/assets/PLAN%20ALERGENOS.pdf" target="_blank" rel="noopener noreferrer">Alérgenos</a></li>
+        <li><a href="https://www.ubereats.com/es/store/celestial-urban-burgers/-A2RJQZ8W32Vcqd1Ek908A" target="_blank" rel="noopener noreferrer">Pedir a domicilio</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Visítanos</p>
+      <ul>
+        <li><a href="https://www.google.com/maps/reserve/v/dine/c/TGbvpSDPLIA" target="_blank" rel="noopener noreferrer">Reservar mesa</a></li>
+        <li><a href="tel:+34918433143">918 433 143</a></li>
+        <li><a href="https://maps.google.com/?q=Calle+Hospital+de+San+Jose+5+Getafe+Madrid" target="_blank" rel="noopener noreferrer">C/ Hospital San José 5, Getafe</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Legal</p>
+      <ul>
+        <li><a href="https://celestialburgers.es/cookies.html">Política de cookies</a></li>
+        <li><a href="https://celestialburgers.es/data-treatment.html">Datos personales</a></li>
+        <li><a href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 Celestial Urban Burgers · Todos los derechos reservados</p>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/celestial.burgers/" target="_blank" rel="noopener noreferrer">Instagram →</a>
+      <a href="https://www.ubereats.com/es/store/celestial-urban-burgers/-A2RJQZ8W32Vcqd1Ek908A" target="_blank" rel="noopener noreferrer">Uber Eats →</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* NAV */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  /* HAMBURGER */
+  const toggle   = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const setMenu  = open => {
+    navLinks.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  document.querySelectorAll('.nav-close').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && navLinks.classList.contains('open')) { setMenu(false); toggle.focus(); }
+  });
+
+  /* CARRUSEL */
+  const track   = document.getElementById('carouselTrack');
+  const btnPrev = document.getElementById('carPrev');
+  const btnNext = document.getElementById('carNext');
+  let idx = 0;
+
+  function slidesVisible() {
+    return window.innerWidth < 640 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+  }
+  function slideW() {
+    const s = track.querySelector('.carousel-slide');
+    return s ? s.getBoundingClientRect().width + 2 : 0;
+  }
+  function updateCarousel() {
+    const total   = track.querySelectorAll('.carousel-slide').length;
+    const visible = slidesVisible();
+    const max     = Math.max(0, total - visible);
+    idx = Math.min(Math.max(idx, 0), max);
+    track.style.transform = `translateX(-${idx * slideW()}px)`;
+    btnPrev.disabled = idx === 0;
+    btnNext.disabled = idx >= max;
+  }
+  btnPrev.addEventListener('click', () => { idx--; updateCarousel(); });
+  btnNext.addEventListener('click', () => { idx++; updateCarousel(); });
+  window.addEventListener('resize', updateCarousel);
+  updateCarousel();
+
+  /* REVEAL */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
