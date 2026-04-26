@@ -277,11 +277,27 @@
     }
     .menu-card {
       background: var(--c5);
-      padding: 2.5rem 2rem;
       cursor: pointer;
       transition: background 0.3s;
       position: relative;
       overflow: hidden;
+    }
+    .menu-card-img-wrap {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    .menu-card-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.55);
+      transition: filter 0.4s, transform 0.4s;
+    }
+    .menu-card:hover .menu-card-img-wrap img { filter: saturate(1); transform: scale(1.05); }
+    .menu-card-content {
+      padding: 2.5rem 2rem;
+      position: relative;
     }
     .menu-card::after {
       content: '';
@@ -298,10 +314,11 @@
     .menu-card-number {
       font-family: var(--font-display);
       font-size: 4rem;
-      color: rgba(238,232,255,0.06);
+      color: rgba(238,232,255,0.7);
       position: absolute;
-      top: 1rem; right: 1.5rem;
+      top: 0.6rem; right: 1rem;
       line-height: 1;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.7);
     }
     .menu-card-name {
       font-family: var(--font-display);
@@ -756,7 +773,8 @@
       .section-title { font-size: clamp(2.6rem, 12vw, 4rem); }
       .menu-header { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
       .menu-grid { grid-template-columns: 1fr; }
-      .menu-card { padding: 2rem 1.4rem; }
+      .menu-card-img-wrap { height: 180px; }
+      .menu-card-content { padding: 2rem 1.4rem; }
 
       .nachos { grid-template-columns: 1fr; min-height: auto; }
       .nachos-visual { min-height: 260px; order: -1; }
@@ -846,7 +864,7 @@
       .about { gap: 8rem; }
       .nachos-content { padding: 6rem 6rem; }
       .menu-grid { grid-template-columns: repeat(3, 1fr); }
-      .menu-card { padding: 3rem 2.5rem; }
+      .menu-card-content { padding: 3rem 2.5rem; }
       .menu-card-name { font-size: 1.9rem; }
       .carousel-section { padding: 9rem 0; }
       .carousel-header { padding: 0 7rem; }
@@ -874,7 +892,7 @@
       .nachos-content { padding: 8rem 8rem; }
       .nachos-title { font-size: clamp(5rem, 5vw, 8rem); }
       .nachos-desc { font-size: 1.05rem; max-width: 440px; }
-      .menu-card { padding: 3.5rem 3rem; }
+      .menu-card-content { padding: 3.5rem 3rem; }
       .menu-card-name { font-size: 2.1rem; }
       .menu-card-number { font-size: 5rem; }
       .menu-card-desc { font-size: 0.95rem; }
@@ -969,46 +987,70 @@
   </div>
   <div class="menu-grid reveal">
     <div class="menu-card">
-      <span class="menu-card-number">01</span>
-      <p class="menu-card-name">CELESTIAL</p>
-      <p class="menu-card-desc">Doble smash de vaca madurada 60 días DISCARLUX en pan brioche potato bun, salsa mayo ahumada, queso olavidia (premio al mejor queso del mundo) y cebolla caramelizada al Pedro Ximénez casera
-</p>
-      <span class="menu-card-tag">La más pedida ★</span>
+      <div class="menu-card-img-wrap">
+        <img src="img/burger1.png" alt="Burger Celestial">
+        <span class="menu-card-number">01</span>
+      </div>
+      <div class="menu-card-content">
+        <p class="menu-card-name">CELESTIAL</p>
+        <p class="menu-card-desc">Doble smash de vaca madurada 60 días DISCARLUX en pan brioche potato bun, salsa mayo ahumada, queso olavidia (premio al mejor queso del mundo) y cebolla caramelizada al Pedro Ximénez casera.</p>
+        <span class="menu-card-tag">La más pedida ★</span>
+      </div>
     </div>
     <div class="menu-card">
-      <span class="menu-card-number">02</span>
-      <p class="menu-card-name">BIG BANG</p>
-      <p class="menu-card-desc">Pan brioche con mantequilla tostada, salsa spicy mayo, carne de Buey madurado 70 días 180gr certificada DISCARLUX , queso Gallego Arzúa fundido, bacon ahumado crujiente.</p>
-      <span class="menu-card-tag">Signature</span>
+      <div class="menu-card-img-wrap">
+        <img src="img/smash.png" alt="Big Bang Burger">
+        <span class="menu-card-number">02</span>
+      </div>
+      <div class="menu-card-content">
+        <p class="menu-card-name">BIG BANG</p>
+        <p class="menu-card-desc">Pan brioche con mantequilla tostada, salsa spicy mayo, carne de Buey madurado 70 días 180gr certificada DISCARLUX, queso Gallego Arzúa fundido, bacon ahumado crujiente.</p>
+        <span class="menu-card-tag">Signature</span>
+      </div>
     </div>
     <div class="menu-card">
-      <span class="menu-card-number">03</span>
-      <p class="menu-card-name">La Ganadora</p>
-      <p class="menu-card-desc">Pan Brioche, medallón 180gr de carne de buey DISCARLUX, Salsa Emy, Confitura de bacon y queso inglés.
-</p>
-      <span class="menu-card-tag">La más especial</span>
+      <div class="menu-card-img-wrap">
+        <img src="img/burger2.png" alt="La Ganadora">
+        <span class="menu-card-number">03</span>
+      </div>
+      <div class="menu-card-content">
+        <p class="menu-card-name">La Ganadora</p>
+        <p class="menu-card-desc">Pan Brioche, medallón 180gr de carne de buey DISCARLUX, Salsa Emy, Confitura de bacon y queso inglés.</p>
+        <span class="menu-card-tag">La más especial</span>
+      </div>
     </div>
     <div class="menu-card">
-      <span class="menu-card-number">04</span>
-      <p class="menu-card-name">NACHOS CELESTIAL</p>
-      <p class="menu-card-desc">Totopos caseros, pulled pork, nata agria, crema de cheddar y salsa Honey BBQ.</p>
-      <span class="menu-card-tag">Para compartir</span>
+      <div class="menu-card-img-wrap">
+        <img src="img/rollitos.png" alt="Nachos Celestial">
+        <span class="menu-card-number">04</span>
+      </div>
+      <div class="menu-card-content">
+        <p class="menu-card-name">NACHOS CELESTIAL</p>
+        <p class="menu-card-desc">Totopos caseros, pulled pork, nata agria, crema de cheddar y salsa Honey BBQ.</p>
+        <span class="menu-card-tag">Para compartir</span>
+      </div>
     </div>
     <div class="menu-card">
-      <span class="menu-card-number">05</span>
-      <p class="menu-card-name">Golden Jam Fries</p>
-      <p class="menu-card-desc">Cama de patatas fritas crujientes, salsa cheddar casera, confitura de bacon y salsa emmy.
-</p>
-      <span class="menu-card-tag">NOVEDAD</span>
+      <div class="menu-card-img-wrap">
+        <img src="img/papas.png" alt="Golden Jam Fries">
+        <span class="menu-card-number">05</span>
+      </div>
+      <div class="menu-card-content">
+        <p class="menu-card-name">Golden Jam Fries</p>
+        <p class="menu-card-desc">Cama de patatas fritas crujientes, salsa cheddar casera, confitura de bacon y salsa emmy.</p>
+        <span class="menu-card-tag">NOVEDAD</span>
+      </div>
     </div>
     <div class="menu-card">
-      <span class="menu-card-number">06</span>
-      <p class="menu-card-name">Creamy Cheesecake</p>
-      <p class="menu-card-desc">Tarta de queso cremosa con galleta de jengibre y chocolate blanco jungly.
-</p>
-      <span class="menu-card-tag">PARA LOS MAS QUESEROS
-      
-      </span>
+      <div class="menu-card-img-wrap">
+        <img src="img/wings.png" alt="Creamy Cheesecake">
+        <span class="menu-card-number">06</span>
+      </div>
+      <div class="menu-card-content">
+        <p class="menu-card-name">Creamy Cheesecake</p>
+        <p class="menu-card-desc">Tarta de queso cremosa con galleta de jengibre y chocolate blanco jungly.</p>
+        <span class="menu-card-tag">Para los más queseros</span>
+      </div>
     </div>
   </div>
 </section>
